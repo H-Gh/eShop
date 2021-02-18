@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Interfaces\ShouldPublish;
 use Throwable;
 
 /**
@@ -12,7 +13,7 @@ use Throwable;
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
  */
-class FailedOperationException extends BaseException
+class FailedOperationException extends BaseException implements ShouldPublish
 {
     /**
      * Construct the exception. Note: The message is NOT binary safe.
@@ -23,10 +24,8 @@ class FailedOperationException extends BaseException
      * @param int            $code     [optional] The Exception code.
      * @param Throwable|null $previous [optional] The previous throwable used for the exception chaining.
      */
-    public function __construct($message = "The operation has been failed.", $code = 0, Throwable $previous = null)
+    public function __construct($message = "The operation has been failed.", $code = 500, Throwable $previous = null)
     {
-        parent::__construct($message,
-            $code,
-            $previous);
+        parent::__construct($message, $code, $previous);
     }
 }
