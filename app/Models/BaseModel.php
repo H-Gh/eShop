@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * The base model, the higher level model that includes all common functionalities
@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @category Models
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
+ * @mixin Builder
+ * @property int $id
  */
 class BaseModel extends Model
 {
