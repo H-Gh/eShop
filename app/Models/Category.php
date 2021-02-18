@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @category Models
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
+ * @property string $name
+ * @property string $slug
+ * @property int    $status
  */
 class Category extends BaseModel
 {
@@ -22,13 +25,14 @@ class Category extends BaseModel
     protected $fillable = [
         "id",
         "name",
-        "slug"
+        "slug",
+        "status"
     ];
 
     /**
      * @return HasMany
      */
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class);
     }
