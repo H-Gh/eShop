@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,19 @@
 |
 */
 
+use Laravel\Lumen\Routing\Router;
+
 $router->get('/', function () use ($router) {
+    throw new \App\Exceptions\FailedOperationException();
     return $router->app->version();
+});
+
+$router->group(["prefix" => "api/v1"], function () use ($router) {
+    $router->group(["prefix" => "category"], function () use ($router) {
+        $router->get("/", "CategoryController@index");
+        $router->post("/", "CategoryController@store");
+        $router->get("/{id}", "CategoryController@show");
+        $router->put("/{id}", "CategoryController@update");
+        $router->delete("/{id}", "CategoryController@destroy");
+    });
 });
