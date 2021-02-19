@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\FormRequest;
+use App\Models\Category;
 
 /**
  * The request to check the incoming parameters to create a category
@@ -33,6 +34,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             "name" => "required|string|unique:categories",
+            "status" => "integer|in:" . implode(",", Category::STATUS)
         ];
     }
 }

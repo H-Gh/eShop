@@ -41,6 +41,7 @@ class UpdateCategoryRequest extends FormRequest
                     $query->where("id", "!=", request()->route()[2]["id"]);
                 })
             ],
+            "status" => "integer|in:" . implode(",", Category::STATUS)
         ];
     }
 }
