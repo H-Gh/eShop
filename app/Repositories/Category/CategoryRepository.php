@@ -48,7 +48,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function create(array $properties): Model|Category
     {
         $properties = $this->addSlug($properties);
-        return $this->model->create($properties);
+        return $this->query->create($properties);
     }
 
     /**
@@ -61,7 +61,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     public function updateById(int $id, array $properties): Model|Collection|array|Category|null
     {
         $properties = $this->addSlug($properties);
-        $model = $this->model->findOrFail($id);
+        $model = $this->query->findOrFail($id);
         if ($model->update($properties)) {
             return $model->fill($properties);
         }
