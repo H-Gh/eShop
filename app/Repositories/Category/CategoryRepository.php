@@ -4,6 +4,7 @@ namespace App\Repositories\Category;
 
 use App\Exceptions\FailedOperationException;
 use App\Models\Category;
+use App\Repositories\BaseRepository\BaseRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -17,15 +18,16 @@ use Illuminate\Support\Str;
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
  */
-class CategoryRepository implements CategoryRepositoryInterface
+class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
     /**
      * CategoryRepository constructor.
      *
      * @param Category $model
      */
-    public function __construct(private Category $model)
+    public function __construct(Category $model)
     {
+        parent::__construct($model);
     }
 
     /**
@@ -46,17 +48,24 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function create(array $properties): Model|Category
     {
         $properties = $this->addSlug($properties);
-        return $this->model->create($properties);
+        return $this->query->create($properties);
     }
 
     /**
-     * @param $id
+     * @param int   $id
+     * @param array $properties
      *
      * @return Category|Category[]|Collection|Model|null
+     * @throws FailedOperationException
      */
-    public function findByIdOrFail($id): Model|Collection|array|Category|null
+    public function updateById(int $id, array $properties): Model|Collection|array|Category|null
     {
-        return $this->model->findOrFail((int)$id);
+        $properties = $this->addSlug($properties);
+        $model = $this->query->findOrFail($id);
+        if ($model->update($properties)) {
+            return $model->fill($properties);
+        }
+        throw new FailedOperationException("Failed to update the category with id of $id");
     }
 
     /**
@@ -70,33 +79,5 @@ class CategoryRepository implements CategoryRepositoryInterface
             $properties["slug"] = Str::slug($properties["name"]);
         }
         return $properties;
-    }
-
-    /**
-     * @param int   $id
-     * @param array $properties
-     *
-     * @return Category|Category[]|Collection|Model|null
-     * @throws FailedOperationException
-     */
-    public function updateById(int $id, array $properties): Model|Collection|array|Category|null
-    {
-        $properties = $this->addSlug($properties);
-        $model = $this->model->findOrFail($id);
-        if ($model->update($properties)) {
-            return $model->fill($properties);
-        }
-        throw new FailedOperationException("Failed to update the category with id of $id");
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteById(int $id): bool
-    {
-        return $this->model->findOrFail($id)->delete();
     }
 }

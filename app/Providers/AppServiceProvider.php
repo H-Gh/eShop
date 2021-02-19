@@ -4,9 +4,10 @@ namespace App\Providers;
 
 use App\Http\Requests\FormRequest;
 use App\Models\Category;
-use App\Observers\Category\CategoryObserver;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Product\ProductRepository;
+use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\ExceptionHandlerService;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Support\ServiceProvider;
@@ -63,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind('exception_handler', ExceptionHandlerService::class);
         $this->app->singleton(\Illuminate\Contracts\Routing\ResponseFactory::class, function () {
             return new ResponseFactory();

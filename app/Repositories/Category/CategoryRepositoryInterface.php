@@ -4,6 +4,7 @@ namespace App\Repositories\Category;
 
 use App\Exceptions\FailedOperationException;
 use App\Models\Category;
+use App\Repositories\BaseRepository\BaseRepositoryInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
  */
-interface CategoryRepositoryInterface
+interface CategoryRepositoryInterface extends BaseRepositoryInterface
 {
     /**
      * Get all the categories which are active
@@ -33,13 +34,6 @@ interface CategoryRepositoryInterface
     public function create(array $properties): Model|Category;
 
     /**
-     * @param $id
-     *
-     * @return Category|Category[]|Collection|Model|null
-     */
-    public function findByIdOrFail($id): Model|Collection|array|Category|null;
-
-    /**
      * @param int   $id
      * @param array $properties
      *
@@ -47,12 +41,4 @@ interface CategoryRepositoryInterface
      * @throws FailedOperationException
      */
     public function updateById(int $id, array $properties): Model|Collection|array|Category|null;
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function deleteById(int $id): bool;
 }

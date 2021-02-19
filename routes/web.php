@@ -28,4 +28,12 @@ $router->group(["prefix" => "api/v1"], function () use ($router) {
         $router->put("/{id}", "CategoryController@update");
         $router->delete("/{id}", "CategoryController@destroy");
     });
+
+    $router->group(["prefix" => "product"], function () use ($router) {
+        $router->get("/", "ProductController@index");
+        $router->post("/", "ProductController@store");
+        $router->get("/{id}", "ProductController@show");
+        $router->put("/{id}", "ProductController@update");
+        $router->delete("/{id}", "ProductController@destroy");
+    });
 });

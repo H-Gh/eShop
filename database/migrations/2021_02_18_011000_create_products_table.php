@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,8 +22,8 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("slug");
-            $table->unsignedBigInteger("category_id");
-            $table->tinyInteger("status");
+            $table->foreignId("category_id")->constrained()->onDelete("cascade");
+            $table->tinyInteger("status")->default(Product::STATUS["active"]);
             $table->timestamps();
         });
     }

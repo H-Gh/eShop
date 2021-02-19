@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Exceptions\Interfaces\ShouldPublish;
+use App\Exceptions\NotFoundException;
 use App\Exceptions\SystemException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use \Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 /**
@@ -30,9 +31,12 @@ class ExceptionHandlerService
      */
     public function handle(Throwable $throwable): Throwable
     {
+        if ($throwable instanceof ModelNotFoundException) {
+            return new NotFoundException();
+        }
         if ($throwable instanceof ShouldPublish ||
             $throwable instanceof ValidationException ||
-            $throwable instanceof ModelNotFoundException) {
+            $throwable instanceof MethodNotAllowedHttpException) {
             return $throwable;
         } else {
             return new SystemException();
@@ -57,8 +61,8 @@ class ExceptionHandlerService
     private function getCode(Throwable $exception): int
     {
         $code = ($exception->getCode() < 200 || $exception->getCode() >= 600) ? 500 : $exception->getCode();
-        if (isset($exception->status)) {
-            $code = $exception->status;
+        if (method_exists($exception, "getStatusCode")) {
+            $code = $exception->getStatusCode();
         }
         return $code;
     }

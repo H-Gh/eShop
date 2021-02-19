@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Product;
 
 use App\Http\Requests\FormRequest;
-use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Validation\Rule;
 
 /**
- * The request to check the incoming parameters to update a category
+ * The request to check the incoming parameters to create a product
  * PHP version >= 7.0
  *
  * @category Requests
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
  */
-class UpdateCategoryRequest extends FormRequest
+class StoreProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,11 +37,12 @@ class UpdateCategoryRequest extends FormRequest
             "name" => [
                 "required",
                 "string",
-                Rule::unique(Category::class, "name")->where(function ($query) {
-                    $query->where("id", "!=", request()->route()[2]["id"]);
+                Rule::unique(Product::class, "name")->where(function ($query) {
+                    $query->where("category_id", "=", request()->get("category_id"));
                 })
             ],
-            "status" => "integer|in:" . implode(",", Category::STATUS)
+            "category_id" => "required|integer|exists:categories,id",
+            "status" => "integer|in:" . implode(",", Product::STATUS)
         ];
     }
 }

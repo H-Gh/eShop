@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Filters\Filterable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -17,6 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Category extends BaseModel
 {
+    use Filterable;
+
     public const STATUS = [
         "active" => 1,
         "inactive" => 2
@@ -27,6 +30,10 @@ class Category extends BaseModel
         "name",
         "slug",
         "status"
+    ];
+
+    protected $attributes = [
+        'status' => self::STATUS["active"],
     ];
 
     /**

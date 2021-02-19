@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Filters\Filterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -11,9 +12,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @category Models
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
+ * @property int      $id
+ * @property string   $name
+ * @property string   $slug
+ * @property string   $category_id
+ * @property int      $status
+ * @property Category $category
  */
 class Product extends BaseModel
 {
+    use Filterable;
+
     public const STATUS = [
         "active" => 1,
         "inactive" => 2,
@@ -25,13 +34,18 @@ class Product extends BaseModel
         "id",
         "name",
         "slug",
-        "category_id"
+        "category_id",
+        "status"
+    ];
+
+    protected $attributes = [
+        'status' => self::STATUS["active"],
     ];
 
     /**
      * @return BelongsTo
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
