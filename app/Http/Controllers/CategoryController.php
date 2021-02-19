@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\FailedOperationException;
+use App\Http\Filters\CategoryListFilter;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Repositories\Category\CategoryRepositoryInterface;
@@ -28,11 +29,13 @@ class CategoryController extends Controller
     }
 
     /**
+     * @param CategoryListFilter $filter
+     *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(CategoryListFilter $filter): JsonResponse
     {
-        $activeCategories = $this->categoryRepository->getAllActiveCategories();
+        $activeCategories = $this->categoryRepository->setFilter($filter)->all();
         return Response::json(CategoryResource::collection(resource: $activeCategories));
     }
 
