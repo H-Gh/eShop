@@ -4,6 +4,7 @@ namespace App\Repositories\Category;
 
 use App\Exceptions\FailedOperationException;
 use App\Models\Category;
+use App\Repositories\BaseRepository\BaseRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -17,15 +18,16 @@ use Illuminate\Support\Str;
  * @package  eShop
  * @author   Hamed Ghasempour <hamedghasempour@gmail.com>
  */
-class CategoryRepository implements CategoryRepositoryInterface
+class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
     /**
      * CategoryRepository constructor.
      *
      * @param Category $model
      */
-    public function __construct(private Category $model)
+    public function __construct(Category $model)
     {
+        parent::__construct($model);
     }
 
     /**
@@ -50,29 +52,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
-     * @param $id
-     *
-     * @return Category|Category[]|Collection|Model|null
-     */
-    public function findByIdOrFail($id): Model|Collection|array|Category|null
-    {
-        return $this->model->findOrFail((int)$id);
-    }
-
-    /**
-     * @param array $properties
-     *
-     * @return array
-     */
-    private function addSlug(array $properties): array
-    {
-        if (isset($properties["name"])) {
-            $properties["slug"] = Str::slug($properties["name"]);
-        }
-        return $properties;
-    }
-
-    /**
      * @param int   $id
      * @param array $properties
      *
@@ -90,13 +69,15 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
-     * @param int $id
+     * @param array $properties
      *
-     * @return bool
-     * @throws Exception
+     * @return array
      */
-    public function deleteById(int $id): bool
+    private function addSlug(array $properties): array
     {
-        return $this->model->findOrFail($id)->delete();
+        if (isset($properties["name"])) {
+            $properties["slug"] = Str::slug($properties["name"]);
+        }
+        return $properties;
     }
 }
