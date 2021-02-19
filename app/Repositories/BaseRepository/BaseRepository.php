@@ -8,6 +8,7 @@ use App\Models\BaseModel;
 use App\Models\Product;
 use App\Repositories\Product\ProductRepository;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,21 +23,28 @@ use Illuminate\Database\Eloquent\Model;
 class BaseRepository implements BaseRepositoryInterface
 {
     /**
+     * @var Builder
+     */
+    protected Builder $query;
+
+    /**
      * BaseRepository constructor.
      *
      * @param BaseModel $model
      */
-    public function __construct(protected BaseModel $model) { }
+    public function __construct(protected BaseModel $model) {
+        $this->query = $this->model->query();
+    }
 
     /**
-     * @param QueryFilters $filters
+     * @param QueryFilters $filter
      *
      * @return ProductRepository
      */
-    public function setFilters(QueryFilters $filters): BaseRepositoryInterface
+    public function setFilter(QueryFilters $filter): BaseRepositoryInterface
     {
         if ($this->isModelFilterable()) {
-            $this->model->filter($filters);
+            $this->query->filter($filter);
         }
         return $this;
     }
@@ -54,7 +62,7 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function all(): Collection|array
     {
-        return $this->model->get();
+        return $this->query->get();
     }
 
     /**
@@ -64,7 +72,7 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function findByIdOrFail($id): Model|Collection|array|BaseModel|null
     {
-        return $this->model->findOrFail((int)$id);
+        return $this->query->findOrFail((int)$id);
     }
 
     /**
@@ -75,6 +83,6 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function deleteById(int $id): bool
     {
-        return $this->model->findOrFail($id)->delete();
+        return $this->query->findOrFail($id)->delete();
     }
 }

@@ -20,11 +20,11 @@ use Illuminate\Database\Eloquent\Model;
 interface BaseRepositoryInterface
 {
     /**
-     * @param QueryFilters $filters
+     * @param QueryFilters $filter
      *
      * @return BaseRepositoryInterface
      */
-    public function setFilters(QueryFilters $filters): BaseRepositoryInterface;
+    public function setFilter(QueryFilters $filter): BaseRepositoryInterface;
 
     /**
      * @return Product[]|Collection
