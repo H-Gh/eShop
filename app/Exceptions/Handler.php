@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($request->wantsJson() && $e instanceof BaseException) {
+        if (!env("APP_DEBUG") && $request->wantsJson()) {
             $exception = ExceptionFacade::handle($e);
             return ExceptionFacade::renderJson($exception);
         }
