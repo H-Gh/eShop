@@ -6,6 +6,7 @@ use App\Http\Filters\QueryFilters;
 use App\Models\BaseModel;
 use App\Models\Product;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,4 +46,11 @@ interface BaseRepositoryInterface
      * @throws Exception
      */
     public function deleteById(int $id): bool;
+
+    /**
+     * @param int|null $itemPerPage
+     *
+     * @return LengthAwarePaginator
+     */
+    public function paginate(?int $itemPerPage): LengthAwarePaginator;
 }

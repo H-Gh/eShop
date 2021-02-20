@@ -8,6 +8,7 @@ use App\Models\BaseModel;
 use App\Models\Product;
 use App\Repositories\Product\ProductRepository;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -63,6 +64,16 @@ class BaseRepository implements BaseRepositoryInterface
     public function all(): Collection|array
     {
         return $this->query->get();
+    }
+
+    /**
+     * @param int|null $itemPerPage
+     *
+     * @return LengthAwarePaginator
+     */
+    public function paginate(?int $itemPerPage): LengthAwarePaginator
+    {
+        return $this->query->paginate($itemPerPage);
     }
 
     /**
