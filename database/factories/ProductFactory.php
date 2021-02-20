@@ -2,23 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * Class UserFactory
+ * Class ProductFactory
  *
  * @package Database\Factories
  */
-class UserFactory extends Factory
+class ProductFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Product::class;
 
     /**
      * Define the model's default state.
@@ -29,9 +29,10 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => app('hash')->make(Str::random()),
-            'api_token' => Str::random(30),
+            'slug' => $this->faker->unique()->safeEmail,
+            'category_id' => function () {
+                return Category::factory()->create()->id;
+            },
         ];
     }
 }

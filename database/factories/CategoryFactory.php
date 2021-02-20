@@ -2,23 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * Class UserFactory
+ * Class CategoryFactory
  *
  * @package Database\Factories
  */
-class UserFactory extends Factory
+class CategoryFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Category::class;
 
     /**
      * Define the model's default state.
@@ -27,11 +27,11 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->name;
         return [
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => app('hash')->make(Str::random()),
-            'api_token' => Str::random(30),
+            'name' => $name,
+            'slug' => Str::slug($name),
+            'status' => $this->faker->randomElement(Category::STATUS),
         ];
     }
 }

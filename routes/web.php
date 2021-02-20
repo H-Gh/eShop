@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,37 @@
 |
 */
 
+use Laravel\Lumen\Routing\Router;
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->group(["prefix" => "api/v1"], function () use ($router) {
+
+    $router->group(["prefix" => "category"], function () use ($router) {
+        $router->get("/", "CategoryController@index");
+        $router->get("/{id}", "CategoryController@show");
+    });
+
+    $router->group(["prefix" => "product"], function () use ($router) {
+        $router->get("/", "ProductController@index");
+        $router->get("/{id}", "ProductController@show");
+    });
+
+    $router->group(["middleware" => "auth"], function () use ($router) {
+
+        $router->group(["prefix" => "category"], function () use ($router) {
+            $router->post("/", "CategoryController@store");
+            $router->put("/{id}", "CategoryController@update");
+            $router->delete("/{id}", "CategoryController@destroy");
+        });
+
+        $router->group(["prefix" => "product"], function () use ($router) {
+            $router->post("/", "ProductController@store");
+            $router->put("/{id}", "ProductController@update");
+            $router->delete("/{id}", "ProductController@destroy");
+        });
+
+    });
 });
