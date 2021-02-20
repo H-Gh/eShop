@@ -6,11 +6,11 @@ use App\Exceptions\FailedOperationException;
 use App\Http\Filters\ProductListFilter;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Resources\Product\ProductResource;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Response;
  */
 class ProductController extends Controller
 {
-
     /**
      * CategoryController constructor.
      *
@@ -31,14 +30,19 @@ class ProductController extends Controller
     }
 
     /**
-     * @param ProductListFilter $filters
+     * @param ProductListFilter $filter
      *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function index(ProductListFilter $filters): JsonResponse
+    public function index(ProductListFilter $filter): AnonymousResourceCollection
     {
-        $activeCategories = $this->productRepository->setFilter($filters)->all();
-        return Response::json(ProductResource::collection(resource: $activeCategories));
+        $activeCategories = $this->productRepository->setFilter(filter: $filter);
+        $itemPerPage = $this->itemPerPage();
+        if (empty($itemPerPage)) {
+            return ProductResource::collection(resource: $activeCategories->all());
+        } else {
+            return ProductResource::collection(resource: $activeCategories->paginate($itemPerPage));
+        }
     }
 
     /**

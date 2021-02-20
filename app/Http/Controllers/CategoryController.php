@@ -10,6 +10,7 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Resources\Category\CategoryResource;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -31,12 +32,18 @@ class CategoryController extends Controller
     /**
      * @param CategoryListFilter $filter
      *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function index(CategoryListFilter $filter): JsonResponse
+    public function index(CategoryListFilter $filter): AnonymousResourceCollection
     {
-        $activeCategories = $this->categoryRepository->setFilter($filter)->all();
-        return Response::json(CategoryResource::collection(resource: $activeCategories));
+        $activeCategories = $this->categoryRepository->setFilter(filter: $filter);
+        $itemPerPage = $this->itemPerPage();
+        if (empty($this->itemPerPage())) {
+            return CategoryResource::collection(resource: $activeCategories->all());
+        } else {
+            return CategoryResource::collection(resource: $activeCategories->paginate($itemPerPage));
+        }
+
     }
 
     /**
