@@ -16,6 +16,17 @@ class CategoryListFilter extends QueryFilters
 {
     /**
      * @param Builder $builder
+     * @param int     $id
+     *
+     * @return void
+     */
+    public function id(Builder $builder, int $id): void
+    {
+        $builder->where("id", $id);
+    }
+
+    /**
+     * @param Builder $builder
      * @param int     $status
      *
      * @return void
