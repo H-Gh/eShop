@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Filters\Filterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends BaseModel
 {
     use Filterable;
+    use HasFactory;
 
     public const STATUS = [
         "active" => 1,
