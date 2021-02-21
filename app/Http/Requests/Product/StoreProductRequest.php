@@ -41,6 +41,7 @@ class StoreProductRequest extends FormRequest
                     $query->where("category_id", "=", request()->get("category_id"));
                 })
             ],
+            "price" => "required|integer",
             "category_id" => "required|integer|exists:categories,id",
             "status" => "integer|in:" . implode(",", Product::STATUS)
         ];
