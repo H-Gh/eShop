@@ -30,6 +30,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->name,
             'slug' => $this->faker->unique()->safeEmail,
+            'price' => $this->faker->randomFloat(2, 1, 1000),
             'category_id' => function () {
                 return Category::factory()->create()->id;
             },

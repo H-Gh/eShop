@@ -35,7 +35,6 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             "name" => [
-                "required",
                 "string",
                 Rule::unique(Product::class, "name")
                     ->where("category_id", request()->get("category_id"))
@@ -43,7 +42,8 @@ class UpdateProductRequest extends FormRequest
                         $query->where("id", "!=", request()->route()[2]["id"]);
                     })
             ],
-            "category_id" => "required|integer|exists:categories,id",
+            "price" => "numeric",
+            "category_id" => "integer|exists:categories,id",
             "status" => "integer|in:" . implode(",", Product::STATUS)
         ];
     }
