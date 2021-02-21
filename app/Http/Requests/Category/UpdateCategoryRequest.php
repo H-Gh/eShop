@@ -35,7 +35,6 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             "name" => [
-                "required",
                 "string",
                 Rule::unique(Category::class, "name")->where(function ($query) {
                     $query->where("id", "!=", request()->route()[2]["id"]);

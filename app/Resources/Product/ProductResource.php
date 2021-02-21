@@ -29,9 +29,12 @@ class ProductResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "category" => new CategoryResource($this->category),
             "name" => $this->name,
-            "status" => $this->status
+            "price" => $this->price,
+            "category" => new CategoryResource($this->category),
+            "status" => $this->status,
+            "created_at" => $this->created_at->format("Y/m/d H:i:s"),
+            "updated_at" => $this->updated_at->format("Y/m/d H:i:s"),
         ];
     }
 }

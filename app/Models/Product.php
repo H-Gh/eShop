@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int      $id
  * @property string   $name
  * @property string   $slug
+ * @property float    $price
  * @property string   $category_id
  * @property int      $status
  * @property Category $category
@@ -33,9 +34,9 @@ class Product extends BaseModel
     ];
 
     protected $fillable = [
-        "id",
         "name",
         "slug",
+        "price",
         "category_id",
         "status"
     ];
