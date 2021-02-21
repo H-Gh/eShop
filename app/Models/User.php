@@ -15,6 +15,7 @@ use Laravel\Lumen\Auth\Authorizable;
  *
  * @package App\Models
  * @mixin Builder
+ * @property string $api_token
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
