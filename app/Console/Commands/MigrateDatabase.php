@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 /**
  * This class check the connection to mysql and create a loop to wait for mysql to be ready
@@ -40,9 +41,11 @@ class MigrateDatabase extends Command
     {
         $commandString = $this->getCommandString();
         $now = Carbon::now();
+        $counter = 0;
         while (Carbon::now()->diff($now)->s < 120) {
             try {
-                $this->output->info("Try to connect to db and migrate main database ... ");
+                ++$counter;
+                $this->echoMigratingInfo($counter);
                 Artisan::call($commandString);
                 $this->output->success("Migration is done");
                 break;
@@ -71,5 +74,20 @@ class MigrateDatabase extends Command
             $commandString .= " --seed";
         }
         return $commandString;
+    }
+
+    /**
+     * @param int $counter
+     *
+     * @return void
+     */
+    private function echoMigratingInfo(int $counter): void
+    {
+        if (!empty($this->option("database"))) {
+            $connection = DB::connection($this->option("database"));
+        } else {
+            $connection = DB::connection();
+        }
+        $this->output->info("$counter# Try to migrate {$connection->getDatabaseName()} ... ");
     }
 }
