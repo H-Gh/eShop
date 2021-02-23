@@ -36,7 +36,8 @@ COPY --chown=www:www . /var/www
 USER www
 
 EXPOSE 9000
-CMD ["php-fpm"]
 
-RUN composer install
 COPY .env.example .env
+COPY ./.docker/run.sh /tmp
+ENTRYPOINT ["/tmp/run.sh"]
+
