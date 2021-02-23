@@ -37,10 +37,6 @@ USER www
 
 EXPOSE 9000
 
-RUN mkdir vendor
-RUN chmod 0775 vendor
-
-RUN composer install
 COPY .env.example .env
 COPY ./.docker/run.sh /tmp
 ENTRYPOINT ["/tmp/run.sh"]
